@@ -39,12 +39,13 @@ public class XboxControllerCameraController : MonoBehaviour
     {
         // Method to be called in FixedUpdate() when in free mode (four degrees of freedom)
         float delta = Time.deltaTime;
-        Vector3 pos = transform.position + transform.forward * movementInput.leftStick.y * m_XZSpeed + transform.right *
-            movementInput.leftStick.x * m_XZSpeed + (movementInput.rightTrigger - movementInput.leftTrigger)* m_YSpeed * transform.up;
+        Vector3 pos = transform.position + transform.forward * movementInput.leftStick.y * m_XZSpeed * delta + transform.right *
+            movementInput.leftStick.x * m_XZSpeed * delta + (movementInput.rightTrigger - movementInput.leftTrigger)
+            * m_YSpeed * transform.up * delta;
 
         transform.position = pos;
 
-        float panAngleDelta = movementInput.rightStick.y * m_AngularSpeed;
+        float panAngleDelta = movementInput.rightStick.y * m_AngularSpeed * delta;
         m_CameraPanAngle += panAngleDelta;
         if (m_CameraPanAngle < -90)
         {
@@ -56,10 +57,8 @@ public class XboxControllerCameraController : MonoBehaviour
             m_CameraPanAngle = 90;
         }
         
-        transform.Rotate(Vector3.up, -movementInput.rightStick.x * m_AngularSpeed);
-        transform.Rotate(transform.right, panAngleDelta);
-
-        Debug.Log("Right trigger: " + movementInput.rightTrigger + ", left stick.y: " + movementInput.leftStick.y);
+        transform.Rotate(Vector3.up, movementInput.rightStick.x * m_AngularSpeed * delta, relativeTo: Space.World);
+        transform.Rotate(transform.right, -panAngleDelta, relativeTo: Space.World);
     }
     
     public struct MovementInput

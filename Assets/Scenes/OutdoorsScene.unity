@@ -734,7 +734,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_XZSpeed: 100
-  m_YSpeed: 1
+  m_YSpeed: 100
   m_AngularSpeed: 45
   m_IsConstrained: 0
 --- !u!1 &2013410473
