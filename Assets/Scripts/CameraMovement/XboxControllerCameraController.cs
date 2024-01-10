@@ -9,6 +9,7 @@ public class XboxControllerCameraController : MonoBehaviour
     public float m_AngularSpeed = 90f;
     public bool m_IsConstrained = false;
     public float m_ClampingHeight = 2;
+    public bool m_IsGamepadEnabled = true;
 
     private float m_CameraPanAngle = 0f;
     void Update()
@@ -18,16 +19,40 @@ public class XboxControllerCameraController : MonoBehaviour
 
     private void ProcessInput()
     {
-        var gamepad = Gamepad.current;
-        if (gamepad == null)
-            return;
-
         MovementInput movementInput = new MovementInput();
-        movementInput.leftStick = gamepad.leftStick.ReadValue();
-        movementInput.rightStick = gamepad.rightStick.ReadValue();
-        movementInput.leftTrigger = gamepad.leftTrigger.value;
-        movementInput.rightTrigger = gamepad.rightTrigger.value;
-        movementInput.buttonA = gamepad.aButton.wasPressedThisFrame;
+
+        if (m_IsGamepadEnabled)
+        {
+            var gamepad = Gamepad.current;
+            if (gamepad == null)
+                return;
+            
+            movementInput.leftStick = gamepad.leftStick.ReadValue();
+            movementInput.rightStick = gamepad.rightStick.ReadValue();
+            movementInput.leftTrigger = gamepad.leftTrigger.value;
+            movementInput.rightTrigger = gamepad.rightTrigger.value;
+            movementInput.buttonA = gamepad.aButton.wasPressedThisFrame;
+        }
+        else
+        {
+            float a = Input.GetKey(KeyCode.A) ? 1f : 0f;
+            float d = Input.GetKey(KeyCode.D) ? 1f : 0f;
+            float w = Input.GetKey(KeyCode.W) ? 1f : 0f;
+            float s = Input.GetKey(KeyCode.S) ? 1f : 0f;
+            
+            float up = Input.GetKey(KeyCode.UpArrow) ? 1f : 0f;
+            float down = Input.GetKey(KeyCode.DownArrow) ? 1f : 0f;
+            float right = Input.GetKey(KeyCode.RightArrow) ? 1f : 0f;
+            float left = Input.GetKey(KeyCode.LeftArrow) ? 1f : 0f;
+            
+            movementInput.leftStick = new Vector2(d - a, w - s);
+            movementInput.rightStick = new Vector2(right - left, up - down);
+            movementInput.leftTrigger = Input.GetKey(KeyCode.Q) ? 1f : 0f;
+            movementInput.rightTrigger = Input.GetKey(KeyCode.E) ? 1f : 0f;
+            movementInput.buttonA = Input.GetKey(KeyCode.Space);
+            
+        }
+        
 
         if (movementInput.buttonA)
         {
