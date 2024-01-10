@@ -65,8 +65,6 @@ public class XboxControllerCameraController : MonoBehaviour
         {
             HandleFreeMovement(movementInput);
         }
-        
-        
     }
 
     private void HandleConstrainedMovement(MovementInput movementInput)

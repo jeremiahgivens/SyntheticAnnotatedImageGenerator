@@ -8,6 +8,9 @@ public class GolfCourseTerrainGenerator : MonoBehaviour
 
     public float m_PerlinHeightMultiplier = 0.012f;
     public float m_PerlinNodeSpacingMultiplier = 0.1f;
+    
+    public float m_PerlinNoiseHeightMultiplier = 0.1f;
+    public float m_PerlinNoiseNodeSpacingMultiplier = 0.01f;
 
     public bool m_DoGenerateTerrain = false;
     
@@ -38,7 +41,9 @@ public class GolfCourseTerrainGenerator : MonoBehaviour
             {
                 heightmap[x, y] =
                     Mathf.PerlinNoise(x * m_PerlinNodeSpacingMultiplier, y * m_PerlinNodeSpacingMultiplier) *
-                    m_PerlinHeightMultiplier;
+                    m_PerlinHeightMultiplier + 
+                    Mathf.PerlinNoise(x * m_PerlinNoiseNodeSpacingMultiplier, y * m_PerlinNoiseNodeSpacingMultiplier) *
+                    m_PerlinNoiseHeightMultiplier;
             }
         }
         
