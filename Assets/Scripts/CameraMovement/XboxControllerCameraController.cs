@@ -10,10 +10,23 @@ public class XboxControllerCameraController : MonoBehaviour
     public bool m_IsConstrained = false;
     public float m_ClampingHeight = 2;
     public bool m_IsGamepadEnabled = true;
+    public Transform m_TruckTransform;
+    public CarControl m_CarControl;
+    private bool m_IsCar = false;
+    public bool m_ToggleIsCar = false;
+
+    private Vector3 m_CarCamPosition = new Vector3(-0.449999988f,1.94000006f,0.680000007f);
 
     private float m_CameraPanAngle = 0f;
     void Update()
     {
+        if (m_ToggleIsCar)
+        {
+            m_ToggleIsCar = false;
+            m_IsCar = !m_IsCar;
+            SetIsCar(m_IsCar);
+        }
+        
         ProcessInput();
     }
 
@@ -52,9 +65,11 @@ public class XboxControllerCameraController : MonoBehaviour
             movementInput.buttonA = Input.GetKey(KeyCode.Space);
             
         }
-        
 
-        if (movementInput.buttonA)
+        if (m_IsCar)
+        {
+            m_CarControl.Control(movementInput);
+        } else if (movementInput.buttonA)
         {
             m_IsConstrained = !m_IsConstrained;
         } else if (m_IsConstrained)
@@ -132,6 +147,20 @@ public class XboxControllerCameraController : MonoBehaviour
         
         transform.Rotate(Vector3.up, movementInput.rightStick.x * m_AngularSpeed * delta, relativeTo: Space.World);
         transform.Rotate(transform.right, -panAngleDelta, relativeTo: Space.World);
+    }
+
+    public void SetIsCar(bool isCar = true)
+    {
+        if (isCar)
+        {
+            transform.SetParent(m_TruckTransform, false);
+            transform.localPosition = m_CarCamPosition;
+            transform.localRotation = quaternion.identity;
+        }
+        else
+        {
+            transform.SetParent(null);
+        }
     }
     
     public struct MovementInput

@@ -25,11 +25,13 @@ public class CarControl : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    public void Control(XboxControllerCameraController.MovementInput movementInput)
     {
 
-        float vInput = Input.GetAxis("Vertical");
-        float hInput = Input.GetAxis("Horizontal");
+        float vInput = movementInput.rightTrigger - movementInput.leftTrigger;
+        float hInput = movementInput.leftStick.x;
+        
+        Debug.Log("vInput = " + vInput + "hInput = " + hInput);
 
         // Calculate current speed in relation to the forward direction of the car
         // (this returns a negative number when traveling backwards)
